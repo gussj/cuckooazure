@@ -137,6 +137,38 @@ if [ $1 = "vmcloack" ]
 	cuckoo init
 	cuckoo web --host 127.0.0.1 --port 8080
 	echo "Finish VMCloack and Cuckoo Installation. You can use (supervisorctl start cuckoo) to start cuckoo in the background."
+	else
+	mkdir /home/$CURRENTUSER/csand
+	cd /home/$CURRENTUSER/csand/
+	sudo apt-get update
+	sudo apt-get -y install python virtualenv python-pip python-dev build-essential
+	sudo apt-get -y postgresql postgresql-contrib
+	wget https://cuckoo.sh/win7ultimate.iso
+	mkdir /mnt/win7
+	sudo mount -o ro,loop win7ultimate.iso /mnt/win7
+	sudo apt-get -y install build-essential libssl-dev libffi-dev python-dev genisoimage mongodb supervisord
+	sudo apt-get -y install zlib1g-dev libjpeg-dev
+	sudo apt-get -y install python-pip python-virtualenv python-setuptools swig	
+	sudo sysctl -w net.ipv4.conf.vboxnet0.forwarding=1
+	sudo sysctl -w net.ipv4.conf.eth0.forwarding=1
+	sudo iptables -t nat -A POSTROUTING -o eth0 -s 192.168.56.0/24 -j MASQUERADE
+	sudo iptables -P FORWARD DROP
+	sudo iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+	sudo iptables -A FORWARD -s 192.168.56.0/24 -j ACCEPT
+	sudo su cuckoo
+	virtualenv ~/cuckoo
+	.~/cuckoo/bin/activate
+	pip install -U cuckoo vmcloak
+	vmcloak-vboxnet0
+	vmcloak init --verbose --win7x64 win7x64base --cpus 2 --ramsize 2048
+	vmcloak clone win7x64base win7x64cuckoo
+	vmcloak install win7x64cuckoo adobepdf pillow dotnet java flash vcredist vcredist.version=2015u3 wallpaper
+	vmcloak install win7x64cuckoo ie11
+	vmcloak snapshot --count 4 win7x64cuckoo_ 192.168.56.101
+	supervisord -c /home/cuckoo/.cuckoo/supervisord.conf
+	cuckoo init
+	cuckoo web --host 127.0.0.1 --port 8080
+	echo "Finish VMCloack and Cuckoo Installation. You can use (supervisorctl start cuckoo) to start cuckoo in the background."
 	fi
 exit
 fi

@@ -17,7 +17,7 @@ For running this you are going to need:
  - [ ] Create Ubuntu Server VM
  - [ ] Time
 
-This is intended for people that actually worked with Cuckoo in many different ways. This is script is not for beginners.
+This is intended for people that actually worked with Cuckoo in many different ways. This script is not for beginners.
 
 ## The script
 

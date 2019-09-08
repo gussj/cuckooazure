@@ -26,7 +26,7 @@ To run the script first give execution permission:
 
      ./csand.sh
 
-The script will ask for two options:
+The script will ask for one of this options:
 - prereq
 - boombox
 

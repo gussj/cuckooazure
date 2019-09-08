@@ -26,6 +26,12 @@ To run the script first give execution permission:
 
      ./csand.sh
 
+The script will ask for two options:
+- prereq
+- boombox
+
+The first one will install all the pre requisites for all the VM, Cukoo and Python, the second will install boombox only. That option is only recommended for people that already has all the dependencies.
+
 ## Connect VM GUI
 
 Since all the VM are running headless you are going to need to open a RDP port in Azure (Security groups) looking in the result of the scripts.

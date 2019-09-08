@@ -40,7 +40,7 @@ fi
 if [ $# -eq 0 ] && [ $OS == "Debian" ]
    then
     echo ""
-    echo "            Cuckoo Sandbox Headless for Azure        "
+    echo "         Cuckoo Sandbox Headless for Azure        "
     echo "-----------------------------------------------------"
     echo "COMMANDS:"
     echo "prereq      = This will install all the pre-req software for running Cukoo (this is a required step for first time users)"
@@ -48,8 +48,13 @@ if [ $# -eq 0 ] && [ $OS == "Debian" ]
 	echo "vmcloack    = This will install vmcloack and cuckoo for headless server"
     echo ""
 	else
+	if [ $OS == "Debian" ]
+	then
+	print_usage
+  exit 0
+	else
 	echo "System not supported."
-   exit
+	fi
 fi
  
 if [ "$1" = "prereq" ]

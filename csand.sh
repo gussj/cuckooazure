@@ -7,8 +7,9 @@ if [ $# -eq 0 ]
     echo "            Cuckoo Sandbox Headless"
     echo "-----------------------------------------------------"
     echo "COMMANDS:"
-    echo "prereq      = This will install all the pre-req software for running Cukoo"
-    echo "boombox     = This only installs boombox for headless server"
+    echo "prereq      = This will install all the pre-req software for running Cukoo (this is a required step for first time users)"
+    echo "boombox     = This only installs boombox and cuckoo for headless server"
+	echo "vmcloack    = This will install vmcloack and cuckoo for headless server"
     echo ""
    exit
  fi
@@ -24,7 +25,10 @@ if [ $1 = "prereq" ]
 	sudo apt-get update --qq
 	sudo apt-get upgrade --force-yes
 	sudo apt-get install git libffi-dev build-essential unzip python-django python python-dev python-pip python-pil python-sqlalchemy python-bson python-dpkt python-jinja2 python-magic python-pymongo python-gridfs python-libvirt python-bottle python-pefile python-chardet tcpdump apparmor-utils libjpeg-dev python-virtualenv python3-virtualenv virtualenv swig libpq-dev autoconf libtool libjansson-dev libmagic-dev libssl-dev virtualbox-6.0 -y
-	sudo aa-disable /usr/sbin/tcpdump
+	sudo adduser --disabled-password --gecos "" cuckoo
+	sudo groupadd pcap
+	sudo usermod -a -G pcap cuckoo
+	sudo chgrp pcap /usr/sbin/tcpdump
 	sudo setcap cap_net_raw,cap_net_admin=eip /usr/sbin/tcpdump
 	cd
 	mkdir /home/$CURRENTUSER/csand
@@ -33,6 +37,7 @@ if [ $1 = "prereq" ]
 	cd files
 	wget https://download.virtualbox.org/virtualbox/6.0.12/Oracle_VM_VirtualBox_Extension_Pack-6.0.12.vbox-extpack
 	sudo VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-5.1.0-108711.vbox-extpack
+	sudo usermod -a -G vboxusers cuckoo
 	wget https://github.com/VirusTotal/yara/archive/v3.10.0.tar.gz -O yara-3.10.0.tar.gz
 	tar -zxf yara-3.10.0.tar.gz
 	cd yara-3.10.0
@@ -101,6 +106,45 @@ if [ $1 = "boombox" ]
 	cd BoomBox-master/
 	./build.sh virtualbox
 	echo "Finish Boombox Installation"
+	fi
+exit
+fi
+
+if [ $1 = "vmcloack" ]
+   then
+   DIR="/home/$CURRENTUSER/csand/"
+	if [ -d "$DIR" ]; then
+	echo "Initiating VMCloak and Cuckoo Installation"
+	cd /home/$CURRENTUSER/csand/
+	sudo apt-get update
+	sudo apt-get -y install python virtualenv python-pip python-dev build-essential
+	sudo apt-get -y postgresql postgresql-contrib
+	wget https://cuckoo.sh/win7ultimate.iso
+	mkdir /mnt/win7
+	sudo mount -o ro,loop win7ultimate.iso /mnt/win7
+	sudo apt-get -y install build-essential libssl-dev libffi-dev python-dev genisoimage mongodb supervisord
+	sudo apt-get -y install zlib1g-dev libjpeg-dev
+	sudo apt-get -y install python-pip python-virtualenv python-setuptools swig	
+	sudo sysctl -w net.ipv4.conf.vboxnet0.forwarding=1
+	sudo sysctl -w net.ipv4.conf.eth0.forwarding=1
+	sudo iptables -t nat -A POSTROUTING -o eth0 -s 192.168.56.0/24 -j MASQUERADE
+	sudo iptables -P FORWARD DROP
+	sudo iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+	sudo iptables -A FORWARD -s 192.168.56.0/24 -j ACCEPT
+	sudo su cuckoo
+	virtualenv ~/cuckoo
+	.~/cuckoo/bin/activate
+	pip install -U cuckoo vmcloak
+	vmcloak-vboxnet0
+	vmcloak init --verbose --win7x64 win7x64base --cpus 2 --ramsize 2048
+	vmcloak clone win7x64base win7x64cuckoo
+	vmcloak install win7x64cuckoo adobepdf pillow dotnet java flash vcredist vcredist.version=2015u3 wallpaper
+	vmcloak install win7x64cuckoo ie11
+	vmcloak snapshot --count 4 win7x64cuckoo_ 192.168.56.101
+	supervisord -c /home/cuckoo/.cuckoo/supervisord.conf
+	cuckoo init
+	cuckoo web --host 127.0.0.1 --port 8080
+	echo "Finish VMCloack and Cuckoo Installation. You can use (supervisorctl start cuckoo) to start cuckoo in the background."
 	fi
 exit
 fi

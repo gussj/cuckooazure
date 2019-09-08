@@ -20,7 +20,10 @@ For running this you are going to need:
 This is intended for people that actually worked with Cuckoo in many different ways. This script is not for beginners.
 
 ## The script
-
+Download the script using git:
+```bash
+git clone https://github.com/gussj/cuckooazure.git
+```
 To run the script first give execution permission:
 
     chmod +x csand.sh

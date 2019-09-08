@@ -17,6 +17,8 @@ For running this you are going to need:
  - [ ] Create Ubuntu Server VM
  - [ ] Time
 
+This is intended for people that actually worked with Cuckoo in many different ways. This is script is not for beginners.
+
 ## The script
 
 To run the script first give execution permission:
@@ -29,8 +31,9 @@ To run the script first give execution permission:
 The script will ask for one of this options:
 - prereq
 - boombox
+- vmcloack
 
-The first one will install all the pre requisites for all the VM, Cukoo and Python, the second will install boombox only. That option is only recommended for people that already has all the dependencies.
+The first one will install all the pre requisites for all the VM, Cuckoo and Python, the second will install boombox and Cuckoo and last option will install vmcloack with Cuckoo. Last two options are only recommended for people that already has all the dependencies.
 
 ## Connect VM GUI
 

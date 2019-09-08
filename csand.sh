@@ -1,4 +1,5 @@
-#!/bin/bash
+#! /bin/bash
+
 CURRENTUSER="$(whoami)"
 export CURRENTUSER
 

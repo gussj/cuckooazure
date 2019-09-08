@@ -125,7 +125,7 @@ if [ "$1" = "prereq" ]
 exit
 fi
 
-if [ $1 = "boombox" ]
+if [ $1 -eq "boombox" ]
    then
 	# determine if we need sudo
 	if [ "$(echo "$UID")" = "0" ]; then
@@ -153,7 +153,7 @@ if [ $1 = "boombox" ]
 exit
 fi
 
-if [ $1 = "vmcloack" ]
+if [ $1 -eq "vmcloack" ]
    then
 	# determine if we need sudo
 	if [ "$(echo "$UID")" = "0" ]; then

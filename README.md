@@ -35,6 +35,8 @@ The script will ask for one of this options:
 
 The first one will install all the pre requisites for all the VM, Cuckoo and Python, the second will install boombox and Cuckoo and last option will install vmcloack with Cuckoo. Last two options are only recommended for people that already has all the dependencies.
 
+**YOU SHOULD ONLY INSTALL ONE METHOD AT A TIME. IF YOU NEED TO TEST PLEASE USE SNAPSHOTS.**
+
 ## Connect VM GUI
 
 Since all the VM are running headless you are going to need to open a RDP port in Azure (Security groups) looking in the result of the scripts.

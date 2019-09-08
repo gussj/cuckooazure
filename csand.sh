@@ -46,21 +46,18 @@ if [ $1 = "prereq" ]
 	make
 	sudo make install
 	sudo ln -s /usr/local/lib/libyara.so.3 /usr/lib/libyara.so.3
-
 	wget https://github.com/VirusTotal/yara-python/archive/v3.10.0.tar.gz -O yara-python.tar.gz
 	tar -zxf yara-python.tar.gz
 	cd yara-python-3.10.0
 	python setup.py build
 	sudo python setup.py install
 	cd /home/$CURRENTUSER/csand/files/
-	
 	wget https://github.com/ssdeep-project/ssdeep/releases/download/release-2.14.1/ssdeep-2.14.1.tar.gz -O ssdeep-2.14.1.tar.gz
 	tar -zxf ssdeep-2.14.1.tar.gz
 	cd ssdeep-2.14.1
 	./configure
 	make
 	sudo make install
-
 	pip install pydeep
 	pip install openpyxl
 	pip install ujson
@@ -68,22 +65,17 @@ if [ $1 = "prereq" ]
 	pip install distorm3
 	pip install pytz
 	pip install jsonschema
-	
 	cd /home/$CURRENTUSER/csand/files/
-
 	git clone https://github.com/volatilityfoundation/volatility.git
 	cd volatility
 	python setup.py build
 	sudo python setup.py install
-	
 	cd /home/$CURRENTUSER/csand/files/
-	
 	wget https://releases.hashicorp.com/packer/1.4.3/packer_1.4.3_linux_amd64.zip
 	unzip packer_1.4.3_linux_amd64.zip
 	sudo mv packer /usr/local/bin
 	wget https://releases.hashicorp.com/vagrant/2.2.5/vagrant_2.2.5_x86_64.deb
 	sudo dpkg -i vagrant_2.2.5_x86_64.deb
-	
     echo "Finish installing pre-reqs"
 exit
 fi

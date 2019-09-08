@@ -23,6 +23,7 @@ This is intended for people that actually worked with Cuckoo in many different w
 Download the script using git:
 ```bash
 git clone https://github.com/gussj/cuckooazure.git
+cd cuckooazure
 ```
 To run the script first give execution permission:
 

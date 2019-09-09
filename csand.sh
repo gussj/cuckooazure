@@ -188,7 +188,10 @@ if [ "$1" = "vmcloack" ]
 	$sudo_cmd su cuckoo
 	virtualenv ~/cuckoo
 	.~/cuckoo/bin/activate
-	pip install -U cuckoo vmcloak
+	pip install -U cuckoo
+	git clone https://github.com/gussj/vmcloak.git
+	cd vmcloak
+	python setup.py install
 	vmcloak-vboxnet0
 	vmcloak init --verbose --win7x64 win7x64base --cpus 2 --ramsize 2048
 	vmcloak clone win7x64base win7x64cuckoo
@@ -220,7 +223,10 @@ if [ "$1" = "vmcloack" ]
 	sudo su cuckoo
 	virtualenv ~/cuckoo
 	.~/cuckoo/bin/activate
-	pip install -U cuckoo vmcloak
+	pip install -U cuckoo
+	git clone https://github.com/gussj/vmcloak.git
+	cd vmcloak
+	python setup.py install
 	vmcloak-vboxnet0
 	vmcloak init --verbose --win7x64 win7x64base --cpus 2 --ramsize 2048
 	vmcloak clone win7x64base win7x64cuckoo

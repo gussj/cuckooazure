@@ -47,14 +47,6 @@ if [ $# -eq 0 ] && [ $OS == "Debian" ]
     echo "boombox     = This only installs boombox and cuckoo for headless server"
 	echo "vmcloack    = This will install vmcloack and cuckoo for headless server"
     echo ""
-	else
-	if [ $OS == "Debian" ]
-	then
-	print_usage
-  exit 0
-	else
-	echo "System not supported."
-	fi
 fi
  
 if [ "$1" = "prereq" ]

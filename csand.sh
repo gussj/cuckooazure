@@ -64,8 +64,8 @@ if [ "$1" = "prereq" ]
 	$sudo_cmd add-apt-repository universe
 	$sudo_cmd add-apt-repository multiverse
 	$sudo_cmd echo "deb https://download.virtualbox.org/virtualbox/debian disco contrib" | sudo tee -a /etc/apt/sources.list
-	wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
-	wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
+	$sudo_cmd wget -q https://www.virtualbox.org/download/oracle_vbox_2016.asc -O- | sudo apt-key add -
+	$sudo_cmd wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
 	$sudo_cmd apt-get update
 	$sudo_cmd apt-get upgrade --allow-downgrades --allow-remove-essential --allow-change-held-packages
 	$sudo_cmd apt-get install git libffi-dev libjpeg8-dev zlib1g-dev genisoimage build-essential unzip python-django python python-dev python-pip python-pil python-sqlalchemy python-bson python-dpkt python-jinja2 python-magic python-pymongo python-gridfs python-libvirt python-bottle python-pefile python-chardet tcpdump apparmor-utils libjpeg-dev python-virtualenv python3-virtualenv virtualenv swig libpq-dev autoconf libtool libjansson-dev libmagic-dev libssl-dev virtualbox-6.0 -y

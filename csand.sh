@@ -68,7 +68,7 @@ if [ "$1" = "prereq" ]
 	wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
 	$sudo_cmd apt-get update
 	$sudo_cmd apt-get upgrade --allow-downgrades --allow-remove-essential --allow-change-held-packages
-	$sudo_cmd apt-get install git libffi-dev build-essential unzip python-django python python-dev python-pip python-pil python-sqlalchemy python-bson python-dpkt python-jinja2 python-magic python-pymongo python-gridfs python-libvirt python-bottle python-pefile python-chardet tcpdump apparmor-utils libjpeg-dev python-virtualenv python3-virtualenv virtualenv swig libpq-dev autoconf libtool libjansson-dev libmagic-dev libssl-dev virtualbox-6.0 -y
+	$sudo_cmd apt-get install git libffi-dev libjpeg8-dev zlib1g-dev genisoimage build-essential unzip python-django python python-dev python-pip python-pil python-sqlalchemy python-bson python-dpkt python-jinja2 python-magic python-pymongo python-gridfs python-libvirt python-bottle python-pefile python-chardet tcpdump apparmor-utils libjpeg-dev python-virtualenv python3-virtualenv virtualenv swig libpq-dev autoconf libtool libjansson-dev libmagic-dev libssl-dev virtualbox-6.0 -y
 	$sudo_cmd adduser --disabled-password --gecos "" cuckoo
 	$sudo_cmd groupadd pcap
 	$sudo_cmd usermod -a -G pcap cuckoo
@@ -166,22 +166,19 @@ if [ "$1" = "vmcloack" ]
 	cd /home/"$CURRENTUSER"/csand/
 	$sudo_cmd apt-get update
 	$sudo_cmd apt-get -y install python virtualenv python-pip python-dev build-essential
-	$sudo_cmd apt-get -y postgresql postgresql-contrib
-	wget https://cuckoo.sh/win7ultimate.iso
-	mkdir /mnt/win7
+	$sudo_cmd apt-get -y install postgresql postgresql-contrib
+	$sudo_cmd wget https://cuckoo.sh/win7ultimate.iso
+	$sudo_cmd mkdir /mnt/win7
 	$sudo_cmd mount -o ro,loop win7ultimate.iso /mnt/win7
 	$sudo_cmd apt-get -y install build-essential libssl-dev libffi-dev python-dev genisoimage mongodb supervisord
 	$sudo_cmd apt-get -y install zlib1g-dev libjpeg-dev
-	$sudo_cmd apt-get -y install python-pip python-virtualenv python-setuptools swig	
-	$sudo_cmd sysctl -w net.ipv4.conf.vboxnet0.forwarding=1
-	$sudo_cmd sysctl -w net.ipv4.conf.eth0.forwarding=1
-	$sudo_cmd iptables -t nat -A POSTROUTING -o eth0 -s 192.168.56.0/24 -j MASQUERADE
-	$sudo_cmd iptables -P FORWARD DROP
-	$sudo_cmd iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
-	$sudo_cmd iptables -A FORWARD -s 192.168.56.0/24 -j ACCEPT
+	$sudo_cmd apt-get -y install python-pip python-virtualenv python-setuptools swig
+	pip install --upgrade pip
+	pip install pillow
+	pip install --upgrade pillow
 	$sudo_cmd su cuckoo
 	virtualenv ~/cuckoo
-	.~/cuckoo/bin/activate
+	. ~/cuckoo/bin/activate
 	pip install -U cuckoo
 	git clone https://github.com/gussj/vmcloak.git
 	cd vmcloak
@@ -189,10 +186,15 @@ if [ "$1" = "vmcloack" ]
 	vmcloak-vboxnet0
 	vmcloak init --verbose --win7x64 win7x64base --cpus 2 --ramsize 2048
 	vmcloak clone win7x64base win7x64cuckoo
-	vmcloak install win7x64cuckoo adobepdf pillow dotnet java flash vcredist vcredist.version=2015u3 wallpaper
-	vmcloak install win7x64cuckoo ie11
+	vmcloak install win7x64cuckoo adobepdf pillow dotnet java flash vcredist vcredist.version=2015u3 wallpaper ie11
 	vmcloak snapshot --count 4 win7x64cuckoo_ 192.168.56.101
 	supervisord -c /home/cuckoo/.cuckoo/supervisord.conf
+	$sudo_cmd sysctl -w net.ipv4.conf.vboxnet0.forwarding=1
+	$sudo_cmd sysctl -w net.ipv4.conf.eth0.forwarding=1
+	$sudo_cmd iptables -t nat -A POSTROUTING -o eth0 -s 192.168.56.0/24 -j MASQUERADE
+	$sudo_cmd iptables -P FORWARD DROP
+	$sudo_cmd iptables -A FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+	$sudo_cmd iptables -A FORWARD -s 192.168.56.0/24 -j ACCEPT
 	cuckoo init
 	cuckoo web --host 127.0.0.1 --port 8080
 	echo "Finish VMCloack and Cuckoo Installation. You can use (supervisorctl start cuckoo) to start cuckoo in the background."

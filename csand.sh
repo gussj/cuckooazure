@@ -68,7 +68,7 @@ if [ "$1" = "prereq" ]
 	$sudo_cmd wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
 	$sudo_cmd apt-get update
 	$sudo_cmd apt-get upgrade --allow-downgrades --allow-remove-essential --allow-change-held-packages
-	$sudo_cmd apt-get install git libffi-dev libjpeg8-dev zlib1g-dev genisoimage supervisor build-essential unzip python-django python python-dev python-pip python-pil python-sqlalchemy python-bson python-dpkt python-jinja2 python-magic python-pymongo python-gridfs python-libvirt python-bottle python-pefile python-chardet tcpdump apparmor-utils libjpeg-dev python-virtualenv python3-virtualenv virtualenv swig libpq-dev autoconf libtool libjansson-dev libmagic-dev libssl-dev virtualbox-5.2 -y
+	$sudo_cmd apt-get install git libffi-dev libjpeg8-dev zlib1g-dev genisoimage supervisor uwsgi uwsgi-plugin-python nginx build-essential unzip python-django python python-dev python-pip python-pil python-sqlalchemy python-bson python-dpkt python-jinja2 python-magic python-pymongo python-gridfs python-libvirt python-bottle python-pefile python-chardet tcpdump apparmor-utils libjpeg-dev python-virtualenv python3-virtualenv virtualenv swig libpq-dev autoconf libtool libjansson-dev libmagic-dev libssl-dev virtualbox-5.2 -y
 	$sudo_cmd adduser --disabled-password --gecos "" cuckoo
 	$sudo_cmd groupadd pcap
 	$sudo_cmd usermod -a -G pcap cuckoo
@@ -179,7 +179,7 @@ if [ "$1" = "vmcloack" ]
 	$sudo_cmd su cuckoo
 	virtualenv ~/cuckoo
 	. ~/cuckoo/bin/activate
-	pip install -U cuckoo vmcloak
+	pip install -U cuckoo vmcloak uwsgi
 	vmcloak-vboxnet0
 	vmcloak init --verbose --win7x64 win7x64base --cpus 2 --ramsize 2048
 	vmcloak clone win7x64base win7x64cuckoo
@@ -196,9 +196,22 @@ if [ "$1" = "vmcloack" ]
 	cuckoo init
 	# need to modify the cuckoo files with no machines. /conf/virtualbox.conf machines =
 	while read -r vm ip; do cuckoo machine --add $vm $ip; done < <(vmcloak list vms)
-	cuckoo web --host 127.0.0.1 --port 8080
+	cuckoo community --force
+	cuckoo web --uwsgi > /home/cuckoo/cuckoo-web.ini
+	#need to go to root context
+	sudo cp /home/cuckoo/cuckoo-web.ini /etc/uwsgi/apps-available/cuckoo-web.ini
+	sudo ln -s /etc/uwsgi/apps-available/cuckoo-web.ini /etc/uwsgi/apps-enabled/cuckoo-web.ini
+	sudo adduser www-data cuckoo
+	sudo systemctl restart uwsgi
+	#stop root context
+	cuckoo web --nginx > /home/cuckoo/cuckoo-web.conf
+	#switch root content
+	sudo cp /home/cuckoo/cuckoo-web.conf /etc/nginx/sites-available/cuckoo-web.conf
+	sudo ln -s /etc/nginx/sites-available/cuckoo-web.conf /etc/nginx/sites-enabled/cuckoo-web.conf
+	sudo systemctl restart nginx
+	#exit root context
 	supervisord -c /home/cuckoo/.cuckoo/supervisord.conf
-	echo "Finish VMCloack and Cuckoo Installation. You can use (supervisorctl start cuckoo) to start cuckoo in the background."
+	echo "Finish VMCloack and Cuckoo Installation. You can use (supervisorctl start cuckoo) to start cuckoo in the background. or cuckoo --debug"
 	else
 	mkdir /home/"$CURRENTUSER"/csand
 	cd /home/"$CURRENTUSER"/csand/

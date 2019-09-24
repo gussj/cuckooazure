@@ -210,6 +210,18 @@ if [ "$1" = "vmcloack" ]
 	sudo ln -s /etc/nginx/sites-available/cuckoo-web.conf /etc/nginx/sites-enabled/cuckoo-web.conf
 	sudo systemctl restart nginx
 	#exit root context
+	cuckoo api --uwsgi > /home/cuckoo/cuckoo-api.ini
+	#need to go to root context
+	sudo cp /home/cuckoo/cuckoo-api.ini /etc/uwsgi/apps-available/cuckoo-api.ini
+	sudo ln -s /etc/uwsgi/apps-available/cuckoo-api.ini /etc/uwsgi/apps-enabled/cuckoo-api.ini
+	sudo systemctl restart uwsgi
+	#stop root context
+	cuckoo api --nginx > /home/cuckoo/cuckoo-api.conf
+	#switch root content
+	sudo cp /home/cuckoo/cuckoo-api.conf /etc/nginx/sites-available/cuckoo-api.conf
+	sudo ln -s /etc/nginx/sites-available/cuckoo-api.conf /etc/nginx/sites-enabled/cuckoo-api.conf
+	sudo systemctl restart nginx
+	#exit root context
 	supervisord -c /home/cuckoo/.cuckoo/supervisord.conf
 	echo "Finish VMCloack and Cuckoo Installation. You can use (supervisorctl start cuckoo) to start cuckoo in the background. or cuckoo --debug"
 	else

@@ -224,6 +224,7 @@ if [ "$1" = "vmcloack" ]
 	#exit root context
 	supervisord -c /home/cuckoo/.cuckoo/supervisord.conf
 	echo "Finish VMCloack and Cuckoo Installation. You can use (supervisorctl start cuckoo) to start cuckoo in the background. or cuckoo --debug"
+	#need to enable virustotal in the config processing file
 	else
 	mkdir /home/"$CURRENTUSER"/csand
 	cd /home/"$CURRENTUSER"/csand/

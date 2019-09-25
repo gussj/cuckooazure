@@ -176,10 +176,16 @@ if [ "$1" = "vmcloack" ]
 	pip install --upgrade pip
 	pip install pillow
 	pip install --upgrade pillow
+	sudo -u postgres psql
+	CREATE DATABASE cuckoo;
+	CREATE USER cuckoo WITH ENCRYPTED PASSWORD 'password';
+	GRANT ALL PRIVILEGES ON DATABASE cuckoo TO cuckoo;
+	\q
+	#edit conf/cuckoo connection = postgresql://cuckoo:password@localhost/cuckoo
 	$sudo_cmd su cuckoo
 	virtualenv ~/cuckoo
 	. ~/cuckoo/bin/activate
-	pip install -U cuckoo vmcloak uwsgi
+	pip install -U cuckoo vmcloak uwsgi psycopg2
 	#execute this on computer turns on
 	vmcloak-vboxnet0
 	vmcloak init --verbose --win7x64 win7x64base --cpus 2 --ramsize 2048

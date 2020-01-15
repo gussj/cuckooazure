@@ -79,8 +79,8 @@ if [ "$1" = "prereq" ]
 	cd /home/"$CURRENTUSER"/csand
 	$sudo_cmd mkdir files
 	cd files
-	$sudo_cmd wget https://download.virtualbox.org/virtualbox/6.0.12/Oracle_VM_VirtualBox_Extension_Pack-6.0.12.vbox-extpack
-	$sudo_cmd VBoxManage extpack install Oracle_VM_VirtualBox_Extension_Pack-6.0.12.vbox-extpack --accept-license=56be48f923303c8cababb0bb4c478284b688ed23f16d775d729b89a2e8e5f9eb
+	$sudo_cmd wget https://download.virtualbox.org/virtualbox/5.2.34/Oracle_VM_VirtualBox_Extension_Pack-5.2.34.vbox-extpack
+	$sudo_cmd VBoxManage extpack install https://download.virtualbox.org/virtualbox/5.2.34/Oracle_VM_VirtualBox_Extension_Pack-5.2.34.vbox-extpack --accept-license=56be48f923303c8cababb0bb4c478284b688ed23f16d775d729b89a2e8e5f9eb
 	$sudo_cmd usermod -a -G vboxusers cuckoo
 	$sudo_cmd wget https://github.com/VirusTotal/yara/archive/v3.10.0.tar.gz -O yara-3.10.0.tar.gz
 	$sudo_cmd tar -zxf yara-3.10.0.tar.gz

@@ -83,11 +83,11 @@ if [ "$1" = "prereq" ]
 	sudo wget https://download.virtualbox.org/virtualbox/5.2.34/Oracle_VM_VirtualBox_Extension_Pack-5.2.34.vbox-extpack
 	sudo VBoxManage extpack install https://download.virtualbox.org/virtualbox/5.2.34/Oracle_VM_VirtualBox_Extension_Pack-5.2.34.vbox-extpack --accept-license=56be48f923303c8cababb0bb4c478284b688ed23f16d775d729b89a2e8e5f9eb
 	sudo usermod -a -G vboxusers cuckoo
-	sudo wget https://github.com/VirusTotal/yara/archive/v3.10.0.tar.gz -O yara-3.10.0.tar.gz
-	sudo tar -zxf yara-3.10.0.tar.gz
-	cd yara-3.10.0
+	sudo wget https://github.com/VirusTotal/yara/archive/v3.11.0.tar.gz -O yara-3.11.0.tar.gz
+	sudo tar -zxf yara-3.11.0.tar.gz
+	cd yara-3.11.0
 	sudo ./bootstrap.sh
-	sudo ./configure -with-crypto -enable-cuckoo -enable-magic
+	sudo ./configure --enable-cuckoo --enable-magic
 	sudo make
 	sudo make install
 	sudo ln -s /usr/local/lib/libyara.so.3 /usr/lib/libyara.so.3
@@ -231,6 +231,8 @@ if [ "$1" = "vmcloack" ]
 	sudo systemctl restart nginx
 	#exit root context
 	supervisord -c /home/cuckoo/.cuckoo/supervisord.conf
+	#https://askubuntu.com/questions/294736/run-a-shell-script-as-another-user-that-has-no-password
+	#create a script with this line: su cuckoo -c '. ~/cuckoo/bin/activate && vmcloak-vboxnet0 && supervisord -c /home/cuckoo/.cuckoo/supervisord.conf' execute every boot.
 	echo "Finish VMCloack and Cuckoo Installation. You can use (supervisorctl start cuckoo) to start cuckoo in the background. or cuckoo --debug"
 	#need to enable virustotal in the config processing file
 	else
@@ -271,8 +273,3 @@ if [ "$1" = "vmcloack" ]
 	fi
 exit
 fi
-
-#in restart use this:
-#. ~/cuckoo/bin/activate
-#vmcloak-vboxnet0
-#supervisord -c /home/cuckoo/.cuckoo/supervisord.conf

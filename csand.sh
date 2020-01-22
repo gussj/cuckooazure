@@ -68,7 +68,7 @@ if [ "$1" = "prereq" ]
 	sudo wget -q https://www.virtualbox.org/download/oracle_vbox.asc -O- | sudo apt-key add -
 	sudo apt-get update
 	sudo apt-get upgrade --allow-downgrades --allow-remove-essential --allow-change-held-packages
-	sudo apt-get install iptables-persistent git libffi-dev libjpeg8-dev zlib1g-dev genisoimage supervisor uwsgi uwsgi-plugin-python nginx build-essential unzip python-django python python-dev python-pip python-pil python-sqlalchemy python-bson python-dpkt python-jinja2 python-magic python-pymongo python-gridfs python-libvirt python-bottle python-pefile python-chardet tcpdump apparmor-utils libjpeg-dev python-virtualenv python3-virtualenv virtualenv swig libpq-dev autoconf libtool libjansson-dev libmagic-dev libssl-dev virtualbox-5.2 -y
+	sudo apt-get install iptables-persistent git libffi-dev libjpeg8-dev zlib1g-dev genisoimage supervisor uwsgi uwsgi-plugin-python nginx build-essential unzip python-django python python-dev python-pip python-pil python-sqlalchemy python-bson python-dpkt python-jinja2 python-magic python-pymongo python-gridfs python-libvirt python-bottle python-pefile python-chardet tcpdump apparmor-utils libjpeg-dev python-virtualenv python3-virtualenv virtualenv swig libpq-dev autoconf libtool libjansson-dev libmagic-dev libssl-dev virtualbox-5.2 volatility supervisor ssdeep -y
 	sudo adduser --disabled-password --gecos "" cuckoo
 	sudo groupadd pcap
 	sudo usermod -a -G pcap cuckoo
@@ -91,9 +91,9 @@ if [ "$1" = "prereq" ]
 	sudo make
 	sudo make install
 	sudo ln -s /usr/local/lib/libyara.so.3 /usr/lib/libyara.so.3
-	sudo wget https://github.com/VirusTotal/yara-python/archive/v3.10.0.tar.gz -O yara-python.tar.gz
+	sudo wget https://github.com/VirusTotal/yara-python/archive/v3.11.0.tar.gz -O yara-python.tar.gz
 	sudo tar -zxf yara-python.tar.gz
-	cd yara-python-3.10.0
+	cd yara-python-3.11.0
 	sudo python setup.py build
 	sudo python setup.py install
 	cd /home/"$CURRENTUSER"/csand/files/
@@ -116,11 +116,11 @@ if [ "$1" = "prereq" ]
 	sudo python setup.py build
 	sudo python setup.py install
 	cd /home/"$CURRENTUSER"/csand/files/
-	sudo wget https://releases.hashicorp.com/packer/1.4.3/packer_1.4.3_linux_amd64.zip
-	sudo unzip packer_1.4.3_linux_amd64.zip
+	sudo wget https://releases.hashicorp.com/packer/1.5.1/packer_1.5.1_linux_amd64.zip
+	sudo unzip packer_1.5.1_linux_amd64.zip
 	sudo mv packer /usr/local/bin
-	sudo wget https://releases.hashicorp.com/vagrant/2.2.5/vagrant_2.2.5_x86_64.deb
-	sudo dpkg -i vagrant_2.2.5_x86_64.deb
+	sudo wget https://releases.hashicorp.com/vagrant/2.2.6/vagrant_2.2.6_x86_64.deb
+	sudo dpkg -i vagrant_2.2.6_x86_64.deb
     echo "Finish installing pre-reqs"
 exit
 fi
@@ -273,3 +273,8 @@ if [ "$1" = "vmcloack" ]
 	fi
 exit
 fi
+
+#in restart use this:
+#. ~/cuckoo/bin/activate
+#vmcloak-vboxnet0
+#supervisord -c /home/cuckoo/.cuckoo/supervisord.conf

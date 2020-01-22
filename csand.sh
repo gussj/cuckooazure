@@ -273,8 +273,3 @@ if [ "$1" = "vmcloack" ]
 	fi
 exit
 fi
-
-#in restart use this:
-#. ~/cuckoo/bin/activate
-#vmcloak-vboxnet0
-#supervisord -c /home/cuckoo/.cuckoo/supervisord.conf

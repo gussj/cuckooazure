@@ -3,6 +3,8 @@
 ![Build Status](https://img.shields.io/github/stars/gussj/cuckooazure.svg)
 ![License](https://img.shields.io/github/license/gussj/cuckooazure.svg)
 
+# This script is not updated, please before use it modify the script.
+
 Cuckoo Sandbox in Azure using Ubuntu Server 19.
 
 This script will install automatically all dependencies and software required  to run Cuckoo Sandbox in Azure.

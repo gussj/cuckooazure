@@ -3,7 +3,7 @@
 ![Build Status](https://img.shields.io/github/stars/gussj/cuckooazure.svg)
 ![License](https://img.shields.io/github/license/gussj/cuckooazure.svg)
 
-# This script is not updated, please before use it modify the script.
+# This script is not updated, please before use it modify the script
 
 Cuckoo Sandbox in Azure using Ubuntu Server 19.
 
